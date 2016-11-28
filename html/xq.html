@@ -1,0 +1,32 @@
+<div id="sq">
+</div>
+
+<script src="../js/jquery.js"></script>
+<script src="../js/handlebars.js"></script>
+<script id="moban" type="x-handlebars-template">
+    <div id="sq">
+        <img src="{{image}}">
+        <p>{{title}}</p>
+    </div>
+</script>
+<script>
+    ;
+    (function ($) {
+        var id = (window.location.hash.length > 0 ? window.location.hash.substring(1) : "");
+        // alert(id);
+
+        /* alert(window.location.href.length)*/
+        $.ajax({
+            url: "https://api.douban.com/v2/music/" + id,
+            data: {
+                id: id
+            },
+            dataType: "jsonp",
+            success: function (e) {
+                var obj = $("#moban").html(),
+                    moban = Handlebars.compile(obj);
+                $("#sq").html(moban(e))
+            }
+        })
+    })(jQuery)
+</script>

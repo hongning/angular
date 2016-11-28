@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <title>水果APP</title>
+    <link rel="stylesheet" href="../css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+</head>
+
+<body>
+    <div class="wrap">
+        <!--header 部分-->
+        <header>
+            <a href="#">logo</a><i class="fa fa-search"></i>
+            <input type="text" placeholder="请输入您要找的音乐" id="tex">
+            <button id="btn">搜索</button>
+
+        </header>
+
+        <!--main 部分-->
+        <div class="main" ng-app="myapp" ng-controller="music">
+            <div class="p1">
+                <h3>华语排行榜</h3>
+
+                <dl id="music">
+
+                </dl>
+            </div>
+            <div class="xq">
+
+            </div>
+        </div>
+        <!--footer 部分-->
+        <footer>
+            <a href="#"><i class="fa fa-home"></i><br/>首页</a>
+            <a href="#"><i class="fa fa-file-text"></i><br/>音乐排行</a>
+            <a href="#"><i class="fa fa-user"></i><br/>会员中心</a>
+            <a href="#"><i class="fa fa-users"></i><br/>关于我们</a>
+            <a href="#"><i class="fa fa-ellipsis-h"></i><br/>更多</a>
+        </footer>
+    </div>
+    <script src="../js/setfontsize.js"></script>
+    <script src="../js/zepto.min.js"></script>
+    <script src="../js/handlebars.js"></script>
+    <script id="moban" type="x-handlebars-template">
+        {{#each this}}
+        <dl id="musiclist">
+            <dt><a href="xq.html#{{id}}" class="musicxq"><img src="{{image}}" alt=""></a></dt>
+            <dd>
+                <h4>{{title}}</h4> {{#each author}}
+                <p>歌手：{{name}}</p>
+                {{/each}}
+
+            </dd>
+            </dt>
+        </dl>
+        {{/each}}
+    </script>
+    <script>
+        $("#btn").on("click", function () {
+            var tex = $("#tex").val();
+
+            $.ajax({
+                url: "https://api.douban.com/v2/music/search",
+                dataType: "jsonp",
+                data: {
+                    q: tex
+                },
+                success: function (e) {
+                    console.log(e);
+                    var obj = $("#moban").html(),
+                        moban = Handlebars.compile(obj);
+                    $("#music").html(moban(e.musics))
+                },
+                error: function () {
+                    alert("请检查数据接口！")
+                }
+            })
+
+        });
+    </script>
+</body>
+
+</html>
